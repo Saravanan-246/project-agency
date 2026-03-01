@@ -9,61 +9,70 @@ import contactRoutes from "./routes/contact.routes.js";
 const app = express();
 
 /* ================= TRUST PROXY ================= */
-/* Required when running behind Render / reverse proxy */
+/* Required for Render / Railway / reverse proxy */
 app.set("trust proxy", 1);
 
 /* ================= SECURITY ================= */
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false, // prevents CORS image/font issues
+  })
+);
+
+/* ================= BODY PARSER ================= */
+app.use(express.json({ limit: "10kb" }));
 
 /* ================= CORS CONFIG ================= */
-/*
-  Allows:
-  - Local development
-  - Production frontend (from environment variable)
-*/
 
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
+
+/* ================= CORS CONFIG ================= */
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests like Postman (no origin)
-      if (!origin) return callback(null, true);
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman
 
-      if (allowedOrigins.includes(origin)) {
+      // Allow localhost
+      if (origin === "http://localhost:5173") {
         return callback(null, true);
       }
 
+      // Allow any Vercel deployment
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      console.warn("Blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
     credentials: true,
   })
 );
 
-/* ================= MIDDLEWARE ================= */
-app.use(express.json());
-
-/* ================= ROUTES ================= */
+/* ================= HEALTH CHECK ================= */
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
     message: "Backend is running",
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
+/* ================= ROUTES ================= */
 app.use("/api/contact", contactRoutes);
 
-/* ================= ERROR HANDLER ================= */
+/* ================= GLOBAL ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
-  console.error("Server Error:", err.message);
+  console.error("❌ Server Error:", err.message);
 
-  res.status(500).json({
+  res.status(err.statusCode || 500).json({
     status: "error",
-    message: "Internal server error",
+    message: err.message || "Internal server error",
   });
 });
 

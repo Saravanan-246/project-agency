@@ -19,8 +19,9 @@ function Contact() {
   const maxLength = 150;
 
   const handleChange = (e) => {
-    if (e.target.id === "message" && e.target.value.length > maxLength) return;
-    setForm({ ...form, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    if (id === "message" && value.length > maxLength) return;
+    setForm({ ...form, [id]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -46,9 +47,9 @@ function Contact() {
     >
       <Container>
         <SectionTitle
-          title="let’s build your"
-          highlight="project"
-          subtitle="share your idea and we’ll reply with a clear technical direction via email."
+          title="Let’s Build Your"
+          highlight="Next System"
+          subtitle="Share your idea and receive a structured technical response within 24 hours."
         />
 
         <div className="grid lg:grid-cols-2 gap-16 mt-16 items-start">
@@ -56,29 +57,30 @@ function Contact() {
           {/* LEFT SIDE */}
           <div className="space-y-6">
             <h3 className="text-2xl font-semibold text-white">
-              scalable engineering solutions
+              Engineering Designed for Scale
             </h3>
 
             <p className="text-slate-400 leading-relaxed">
-              we design secure backend systems, ai-driven workflows,
-              and cloud-ready applications built for performance and growth.
+              We architect secure backend systems, intelligent automation workflows,
+              and cloud-ready applications built for performance, reliability,
+              and long-term growth.
             </p>
 
             <div className="space-y-2 text-sm text-slate-400">
-              <div>• architecture planning</div>
-              <div>• secure backend development</div>
-              <div>• ai & automation systems</div>
-              <div>• cloud infrastructure setup</div>
+              <div>Architecture Planning & System Design</div>
+              <div>Secure Backend Development</div>
+              <div>AI & Automation Integration</div>
+              <div>Cloud Infrastructure Deployment</div>
             </div>
 
-            <div className="pt-4 text-sm text-slate-400">
-              we will respond directly to your email within 24 hours.
+            <div className="pt-4 text-sm text-slate-500">
+              Direct response guaranteed within 24 hours.
             </div>
 
             <div>
               <a
                 href="mailto:saro200621@gmail.com"
-                className="text-indigo-400 font-medium hover:underline"
+                className="text-indigo-400 font-medium hover:underline transition"
               >
                 saro200621@gmail.com
               </a>
@@ -87,18 +89,18 @@ function Contact() {
 
           {/* FORM SIDE */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl backdrop-blur"
+            transition={{ duration: 0.4 }}
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl"
           >
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
 
                 {/* NAME */}
                 <div className="space-y-2">
-                  <label className="text-xs text-slate-400 tracking-wide">
-                    full name
+                  <label className="text-xs text-slate-400 tracking-wide uppercase">
+                    Full Name
                   </label>
                   <input
                     id="name"
@@ -111,8 +113,8 @@ function Contact() {
 
                 {/* EMAIL */}
                 <div className="space-y-2">
-                  <label className="text-xs text-slate-400 tracking-wide">
-                    email
+                  <label className="text-xs text-slate-400 tracking-wide uppercase">
+                    Email Address
                   </label>
                   <input
                     id="email"
@@ -126,8 +128,8 @@ function Contact() {
 
                 {/* MESSAGE */}
                 <div className="space-y-2">
-                  <label className="text-xs text-slate-400 tracking-wide">
-                    project details (max 150 characters)
+                  <label className="text-xs text-slate-400 tracking-wide uppercase">
+                    Project Details
                   </label>
                   <textarea
                     id="message"
@@ -143,30 +145,30 @@ function Contact() {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "submitting..." : "send inquiry"}
+                  {loading ? "Submitting..." : "Send Inquiry"}
                 </Button>
 
                 {error && (
                   <p className="text-sm text-red-400 text-center">
-                    submission failed. please try again.
+                    Submission failed. Please try again.
                   </p>
                 )}
               </form>
             ) : (
               <div className="text-center space-y-4">
                 <h4 className="text-lg font-semibold text-white">
-                  inquiry submitted successfully
+                  Inquiry Submitted
                 </h4>
                 <p className="text-slate-400 text-sm">
-                  thank you for reaching out. we’ll review your request and
-                  continue the discussion via email shortly.
+                  Thank you for reaching out. We’ll review your request
+                  and continue the discussion via email shortly.
                 </p>
 
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-indigo-400 text-sm hover:underline"
+                  className="text-indigo-400 text-sm hover:underline transition"
                 >
-                  submit another request
+                  Submit Another Request
                 </button>
               </div>
             )}
