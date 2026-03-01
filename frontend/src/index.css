@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================
+   Global Base Styles
+===================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-950 text-white antialiased;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent section overlap with fixed navbar */
+section {
+  scroll-margin-top: 110px;
+}
+
+/* =====================================
+   Text Selection
+===================================== */
+
+::selection {
+  @apply bg-indigo-500/80 text-white;
+}
+
+/* =====================================
+   Scrollbar (Minimal Dark UI)
+===================================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* =====================================
+   Design Utilities
+===================================== */
+
+@layer components {
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .glass-card {
+    @apply bg-slate-900/70 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-[0_10px_40px_-15px_rgba(0,0,0,0.6)];
+  }
+
+  .container-narrow {
+    @apply max-w-3xl mx-auto;
+  }
+}
