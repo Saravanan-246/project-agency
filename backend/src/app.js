@@ -8,6 +8,10 @@ import contactRoutes from "./routes/contact.routes.js";
 
 const app = express();
 
+/* ================= TRUST PROXY ================= */
+/* Required when running behind Render / reverse proxy */
+app.set("trust proxy", 1);
+
 /* ================= SECURITY ================= */
 app.use(helmet());
 
@@ -15,7 +19,7 @@ app.use(helmet());
 /*
   Allows:
   - Local development
-  - Production frontend (from env variable)
+  - Production frontend (from environment variable)
 */
 
 const allowedOrigins = [
@@ -25,15 +29,15 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman)
+    origin: (origin, callback) => {
+      // Allow requests like Postman (no origin)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
       }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST"],
     credentials: true,
@@ -56,6 +60,7 @@ app.use("/api/contact", contactRoutes);
 /* ================= ERROR HANDLER ================= */
 app.use((err, req, res, next) => {
   console.error("Server Error:", err.message);
+
   res.status(500).json({
     status: "error",
     message: "Internal server error",
